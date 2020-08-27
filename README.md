@@ -1,6 +1,7 @@
 ## To Do
 -Add confirm password field
 -Add Steam integration
+-Add [material design library](https://material.io/develop/web/docs/getting-started)
 -Add scss build process
 -Basic Styles
 -Host on Digital Ocean with chat.jdillman.com
