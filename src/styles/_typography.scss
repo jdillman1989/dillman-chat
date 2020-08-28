@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Abel&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+
+$font-body: 'Lora', serif;
+$font-heading: 'Abel', sans-serif;
+
+h1,
+h2 {
+	font-family: $font-heading;
+	color: $color-bold;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+}
+
+h1 {
+	font-size: 48px;
+	margin-bottom: 24px;
+}
+
+h2 {
+	font-size: 36px;
+	margin-bottom: 20px;
+}
+
+h1,
+h2,
+p {
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+a,
+button {
+	color: $color-bold;
+	text-decoration: none;
+	font-weight: 700;
+	transition: all .3s;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+
+	&:hover {
+		color: $color-accent;
+	}
+}
+
+.small {
+	font-size: 12px;
+	margin-bottom: 14px;
+}
+
+.msg {
+	text-align: left;
+	position: relative;
+	margin-bottom: 10px;
+
+	p {
+		display: inline-block;
+		padding: 8px 15px;
+		border-radius: 10px;
+		max-width: 70%;
+		background: $color-effect;
+		font-size: 16px;
+		margin: 5px 0;
+	}
+
+	span {
+		font-size: 11px;
+		display: block;
+	}
+
+	&.current {
+		text-align: right;
+		
+		p {
+			text-align: left;
+			background: white;
+		}
+	}
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+.user-list li {
+	list-style: none;
+	position: relative;
+	padding-left: 20px;
+
+	&::before {
+		content: '';
+		height: 7px;
+		width: 7px;
+		border-radius: 20px;
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		transition: all .5s;
+		background: $color-body;
+		border: 2px solid $color-body;
+	}
+
+	&.online::before {
+		background: $color-hover;
+		border: 2px solid $color-bold;
+	}
+}

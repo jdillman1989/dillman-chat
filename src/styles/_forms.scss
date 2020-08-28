@@ -1,0 +1,35 @@
+form {
+
+	input {
+		display: block;
+		margin: 0;
+		margin-bottom: 20px;
+		padding: 10px 15px;
+		border: 0;
+		background: #FFFFFF;
+		width: 100%;
+		font-family: $font-body;
+		font-size: 18px;
+		font-weight: 400;
+
+		&:focus {
+			outline: none;
+			background: $color-effect;
+		}
+	}
+}
+
+.auth-form {
+
+	&__inputs {
+		max-width: 450px;
+		margin: 0 auto;
+	}
+}
+
+.chat-form {
+
+	input {
+		font-size: 22px;
+	}
+}

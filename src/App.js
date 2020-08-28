@@ -5,6 +5,7 @@ import Chat from './pages/Chat';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import { auth } from './services/firebase';
+import './App.scss';
 
 // Route unauthed visitors to the login page
 const AuthRoute = ( path, authenticated, Component ) => {

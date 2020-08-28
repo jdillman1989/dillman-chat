@@ -1,0 +1,36 @@
+@import './styles/_colors.scss';
+@import './styles/_typography.scss';
+@import './styles/_layout.scss';
+@import './styles/_buttons.scss';
+@import './styles/_forms.scss';
+
+html {
+	overflow: hidden;
+}
+
+body {
+	overflow: hidden;
+	overflow-anchor: none;
+	font-family: $font-body;
+	font-size: 22px;
+	font-weight: 400;
+	color: $color-body;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background: 
+		linear-gradient(
+			to bottom,
+			rgba(253, 255, 248, 1), 
+			rgba(253, 255, 248, 0),
+		),
+		url(./assets/bg.jpg)
+	;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center bottom;
+	min-height: 100vh;
+
+	* {
+		box-sizing: border-box;
+	}
+}

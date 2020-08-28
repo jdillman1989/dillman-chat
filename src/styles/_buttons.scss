@@ -1,0 +1,53 @@
+.dill-btn {
+	font-family: $font-heading;
+	font-size: 22px;
+	color: $color-body;
+	text-decoration: none;
+	padding: 10px 20px;
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	transition: all .3s;
+	background: $color-accent;
+	border: 0;
+	border-bottom: 2px solid $color-bold;
+	cursor: pointer;
+
+	&:hover {
+		background: $color-hover;
+		color: $color-body;
+
+		&::after {
+			transform: rotate(15deg) translateX(0px);
+		}
+
+		&::before {
+			transform: rotate(15deg) translateX(0px);
+		}
+	}
+
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		top: -20px;
+		right: 20px;
+		height: 200px;
+		background: $color-effect;
+		transition: all .5s;
+		z-index: 0;
+		opacity: 0.3;
+	}
+
+	&::before {
+		width: 7px;
+		transform: rotate(15deg) translateX(-500px);
+		right: 50px;
+	}
+
+	&::after {
+		width: 20px;
+		transform: rotate(15deg) translateX(-300px);
+		right: 20px;
+	}
+}

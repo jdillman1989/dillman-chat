@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from '../services/firebase';
-import { db } from '../services/firebase';
+import { auth, db } from '../services/firebase';
 import { signout } from '../helpers/auth';
+import UserList from '../components/UserList';
+import Layout from '../components/Layout';
 
 const Chat = () => {
 
@@ -19,6 +20,11 @@ const Chat = () => {
 		setReadError( '' );
 		try {
 			signout();
+
+			db.ref( 'registered/' + user.uid ).set({
+				email: user.email,
+				online: false
+			});
 		} catch (error) {
 			setReadError( error.message );
 		}
@@ -29,11 +35,14 @@ const Chat = () => {
 		setWriteError( null );
 		setContent( '' );
 		try {
-			db.ref( 'chats' ).push( {
-				content: content,
-				timestamp: Date.now(),
-				uid: user.uid
-			} );
+			if ( content !== '' ) {
+				db.ref( 'chats' ).push( {
+					content: content,
+					timestamp: Date.now(),
+					uid: user.uid,
+					email: user.email
+				} );
+			}
 		} catch (error) {
 			setWriteError( error.message );
 		}
@@ -56,31 +65,47 @@ const Chat = () => {
 
 	return (
 		<div>
-			<div className="chats">
-				{
-					chats.map( chat => {
-						return (
-							<p key={chat.timestamp}>{chat.content}</p>
-						)
-					} )
-				}
+			<div className='chat-top'>
+				<div>
+					<button onClick={handleSignout}>Sign Out</button>
+				</div>
+				<UserList/>
 			</div>
-			<form onSubmit={handleSubmit} autoComplete="off">
-				<input 
-					type="text" 
-					name="message" 
-					placeholder="Say something" 
-					onChange={handleChange}
-					value={content}
-				/>
-				{writeError ? <p>{writeError}</p> : null}
-				{readError ? <p>{readError}</p> : null}
-				<button type="submit">Send</button>
-			</form>
-			<div>
-				<p>Logged in as <strong>{user.email}</strong></p>
-				<button onClick={handleSignout}>Sign Out</button>
-			</div>
+			<Layout page='chat'>
+				<div>
+					<div className="chats">
+						{ chats.map( chat => {
+							return (
+								<div key={chat.timestamp} className={`
+									msg 
+									${chat.uid === user.uid
+										? 'current'
+										: ''
+									}
+								`}>
+									<span>{chat.email}</span>
+									<p>{chat.content}</p>
+								</div>
+							)
+						} ) }
+					</div>
+					<form className='chat-form' onSubmit={handleSubmit} autoComplete="off">
+						<input 
+							type="text" 
+							name="message" 
+							placeholder="Say something" 
+							onChange={handleChange}
+							value={content}
+						/>
+						<div className='left-align'>
+							<button className='dill-btn' type="submit">Send</button>
+							<p className='small'>Logged in as <strong>{user.email}</strong></p>
+							{writeError ? <p>{writeError}</p> : null}
+							{readError ? <p>{readError}</p> : null}
+						</div>
+					</form>
+				</div>
+			</Layout>
 		</div>
 	);
 }
