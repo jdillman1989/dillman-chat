@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { auth, db } from '../services/firebase';
 import { signout } from '../helpers/auth';
 import UserList from '../components/UserList';
@@ -10,7 +10,23 @@ const Chat = () => {
 	const [chats, setChats] = useState( [] );
 	const [content, setContent] = useState( '' );
 	const [readError, setReadError] = useState( null );
+	const [chatScroll, setChatScroll] = useState( true );
 	const [writeError, setWriteError] = useState( null );
+
+	const messagesEndRef = useRef( null );
+
+	const handleScroll = ( e ) => {
+		let element = e.target
+		if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+			setChatScroll( true );
+		} else {
+			setChatScroll( false );
+		}
+	}
+
+	const scrollToBottom = () => {
+		messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+	}
 
 	const handleChange = ( event ) => {
 		setContent( event.target.value );
@@ -36,12 +52,16 @@ const Chat = () => {
 		setContent( '' );
 		try {
 			if ( content !== '' ) {
-				db.ref( 'chats' ).push( {
+				await db.ref( 'chats' ).push( {
 					content: content,
 					timestamp: Date.now(),
 					uid: user.uid,
 					email: user.email
 				} );
+
+				if ( chatScroll ) {
+					scrollToBottom();
+				}
 			}
 		} catch (error) {
 			setWriteError( error.message );
@@ -61,6 +81,8 @@ const Chat = () => {
 		} catch ( error ) {
 			setReadError( error.message );
 		}
+		
+		scrollToBottom();
 	}, [] );
 
 	return (
@@ -73,7 +95,7 @@ const Chat = () => {
 			</div>
 			<Layout page='chat'>
 				<div>
-					<div className="chats">
+					<div className="chats" onScroll={handleScroll}>
 						{ chats.map( chat => {
 							return (
 								<div key={chat.timestamp} className={`
@@ -88,6 +110,7 @@ const Chat = () => {
 								</div>
 							)
 						} ) }
+						<div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
 					</div>
 					<form className='chat-form' onSubmit={handleSubmit} autoComplete="off">
 						<input 

@@ -1,16 +1,16 @@
 ## To Do
 
-[] Add timer for online states
+- [ ] Add timer for online states
 
-[] Add Edit message UI
+- [ ] Add Edit message UI
 
-[] Add confirm password field
+- [ ] Add confirm password field
 
-[] Add Steam integration
+- [ ] Add Steam integration
 
-[] Host on Digital Ocean with chat.jdillman.com
+- [ ] Add animations
 
-[] Add animations
+Hosted on Digital Ocean with chat.jdillman.com
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
