@@ -1,5 +1,9 @@
 ## To Do
 
+[] Add timer for online states
+
+[] Add Edit message UI
+
 [] Add confirm password field
 
 [] Add Steam integration
