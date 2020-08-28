@@ -1,11 +1,12 @@
 ## To Do
--Add confirm password field
--Add Steam integration
--Add [material design library](https://material.io/develop/web/docs/getting-started)
--Add scss build process
--Basic Styles
--Host on Digital Ocean with chat.jdillman.com
--Add animations
+
+[] Add confirm password field
+
+[] Add Steam integration
+
+[] Host on Digital Ocean with chat.jdillman.com
+
+[] Add animations
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
