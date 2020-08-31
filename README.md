@@ -2,6 +2,8 @@
 
 - [ ] Add deployment
 
+- [ ] Limit messages viewed
+
 - [ ] Add Steam integration
 
 - [ ] Add animations
