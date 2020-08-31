@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { signin } from '../helpers/auth';
-import { auth, db } from '../services/firebase';
 import Layout from '../components/Layout';
 
 const Signin = () => {
@@ -23,13 +22,7 @@ const Signin = () => {
 		event.preventDefault();
 		setError( '' );
 		try {
-			await signin( email, password );
-
-			const current = auth().currentUser;
-			db.ref( 'registered/' + current.uid ).set({
-				email: current.email,
-				online: true
-			});
+			signin( email, password );
 		} catch (error) {
 			setError( error.message );
 		}

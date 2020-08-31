@@ -9,6 +9,7 @@ const Signup = () => {
 	const [error, setError] = useState( null );
 	const [email, setEmail] = useState( '' );
 	const [password, setPassword] = useState( '' );
+	const [confirmPassword, setConfirmPassword] = useState( '' );
 
 	const handleEmailChange = ( event ) => {
 		setEmail( event.target.value );
@@ -18,20 +19,28 @@ const Signup = () => {
 		setPassword( event.target.value );
 	};
 
+	const handleConfirmPasswordChange = ( event ) => {
+		setConfirmPassword( event.target.value );
+	};
+
 	// Call our wrappers for the firebase signin method
 	const handleSubmit = async ( event ) => {
 		event.preventDefault();
 		setError( '' );
-		try {
-			await signup( email, password );
+		if ( password === confirmPassword && confirmPassword !== '' ) {
+			try {
+				await signup( email, password );
 
-			const newUser = auth().currentUser;
-			db.ref( 'registered/' + newUser.uid ).set({
-				email: email,
-				online: true
-			});
-		} catch (error) {
-			setError( error.message );
+				const newUser = auth().currentUser;
+				db.ref( 'registered/' + newUser.uid ).set({
+					email: email,
+					online: true
+				});
+			} catch (error) {
+				setError( error.message );
+			}
+		} else {
+			setError( 'Password confirm does not match.' );
 		}
 	};
 
@@ -65,6 +74,14 @@ const Signup = () => {
 							name="password" 
 							onChange={handlePasswordChange}
 							value={password}
+						/>
+
+						<input 
+							placeholder="confirm password" 
+							type="password" 
+							name="confirm-password" 
+							onChange={handleConfirmPasswordChange}
+							value={confirmPassword}
 						/>
 					</div>
 					{error ? <p>{error}</p> : null}

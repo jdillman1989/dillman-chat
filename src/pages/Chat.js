@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { auth, db } from '../services/firebase';
 import { signout } from '../helpers/auth';
+import Message from '../components/Message';
 import UserList from '../components/UserList';
 import Layout from '../components/Layout';
 
@@ -13,7 +14,14 @@ const Chat = () => {
 	const [chatScroll, setChatScroll] = useState( true );
 	const [writeError, setWriteError] = useState( null );
 
-	const messagesEndRef = useRef( null );
+	const chatWindow = useRef( null );
+
+	window.addEventListener( 'beforeunload', () => {  
+		db.ref( 'registered/' + user.uid ).set({
+			email: user.email,
+			online: false
+		});
+	} );
 
 	const handleScroll = ( e ) => {
 		let element = e.target
@@ -25,11 +33,11 @@ const Chat = () => {
 	}
 
 	const scrollToBottom = () => {
-		messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+		chatWindow.current.scrollTop = chatWindow.current.scrollHeight;
 	}
 
-	const handleChange = ( event ) => {
-		setContent( event.target.value );
+	const handleChange = ( e ) => {
+		setContent( e.target.value );
 	};
 
 	const handleSignout = () => {
@@ -46,8 +54,8 @@ const Chat = () => {
 		}
 	};
 
-	const handleSubmit = async ( event ) => {
-		event.preventDefault();
+	const handleSubmit = async ( e ) => {
+		e.preventDefault();
 		setWriteError( null );
 		setContent( '' );
 		try {
@@ -74,16 +82,23 @@ const Chat = () => {
 			db.ref( 'chats' ).on( 'value', ( snapshot ) => {
 				let chats = [];
 				snapshot.forEach( ( snap ) => {
-					chats.push( snap.val() );
+					const snapVal = snap.val();
+					snapVal.msgid = snap.key;
+					chats.push( snapVal );
 				} );
 				setChats( chats );
+
+				scrollToBottom();
+
+				db.ref( 'registered/' + user.uid ).set({
+					email: user.email,
+					online: true
+				});
 			} );
 		} catch ( error ) {
 			setReadError( error.message );
 		}
-		
-		scrollToBottom();
-	}, [] );
+	}, [user] );
 
 	return (
 		<div>
@@ -95,22 +110,20 @@ const Chat = () => {
 			</div>
 			<Layout page='chat'>
 				<div>
-					<div className="chats" onScroll={handleScroll}>
+					<div className="chats" onScroll={handleScroll} ref={chatWindow}>
 						{ chats.map( chat => {
 							return (
-								<div key={chat.timestamp} className={`
-									msg 
-									${chat.uid === user.uid
-										? 'current'
-										: ''
-									}
-								`}>
-									<span>{chat.email}</span>
-									<p>{chat.content}</p>
-								</div>
+								<Message
+									key={chat.timestamp}
+									time={chat.timestamp}
+									author={chat.email}
+									userid={chat.uid}
+									msgid={chat.msgid}
+								>
+									{chat.content}
+								</Message>
 							)
 						} ) }
-						<div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
 					</div>
 					<form className='chat-form' onSubmit={handleSubmit} autoComplete="off">
 						<input 
